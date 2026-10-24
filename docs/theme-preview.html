@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meal Theme Preview</title>
+<style>
+:root{
+  --teal:#2b6777;--mist:#c8d8e4;--white:#fff;--smoke:#f2f2f2;--green:#52ab98;
+  --primary:#2b6777;--primary-hover:#235663;--primary-subtle:#e6eff4;
+  --accent:#52ab98;--accent-strong:#33806f;--accent-subtle:#e3f2ee;
+  --bg:#f2f2f2;--surface:#fff;--border:#c8d8e4;--border-strong:#a9c0d0;
+  --text:#1e3a42;--muted:#5b7480;--danger:#c0392b;
+  --r-sm:6px;--r-md:10px;--r-lg:16px;
+  --shadow:0 4px 14px rgba(43,103,119,.12);
+  font-family:"Inter","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-size:15px}
+header.top{background:var(--primary);color:#fff;padding:20px 16px}
+header.top h1{margin:0;font-size:22px;font-weight:600}
+header.top p{margin:4px 0 0;opacity:.85;font-size:14px}
+main{max-width:1200px;margin:0 auto;padding:24px 16px 48px}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:32px 0 12px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.sw{background:var(--surface);border-radius:var(--r-md);overflow:hidden;box-shadow:0 1px 2px rgba(43,103,119,.08)}
+.sw .chip{height:72px}
+.sw div.l{padding:10px 12px;font-size:13px}
+.sw b{display:block;font-size:14px}
+.sw code{color:var(--muted)}
+.screens{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.phone{width:320px;max-width:100%;background:var(--bg);border:8px solid #1e3a42;border-radius:32px;overflow:hidden;box-shadow:var(--shadow)}
+.appbar{background:var(--primary);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.appbar b{font-size:16px}
+.appbar span{font-size:12px;opacity:.85}
+.pbody{padding:16px;min-height:480px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:14px}
+label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
+input{width:100%;padding:11px 12px;border:1px solid var(--border-strong);border-radius:var(--r-sm);font:inherit;color:var(--text);background:#fff}
+input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(82,171,152,.35)}
+.btn{display:block;width:100%;padding:12px;border:0;border-radius:var(--r-sm);font:inherit;font-weight:600;cursor:pointer}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-hover)}
+.btn-ghost{background:transparent;color:var(--primary);border:1px solid var(--border-strong)}
+.link{color:var(--primary);font-size:13px;text-align:center;display:block;margin-top:12px}
+.logo{width:64px;height:64px;border-radius:18px;background:var(--accent-subtle);display:grid;place-items:center;margin:16px auto 8px}
+.logo svg{width:34px;height:34px}
+.center{text-align:center}
+.muted{color:var(--muted);font-size:13px}
+.day{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:10px 12px;margin-bottom:8px}
+.day .d b{display:block;font-size:14px}
+.day .d small{color:var(--muted);font-size:12px}
+.pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:6px}
+.pill:before{content:"";width:7px;height:7px;border-radius:50%}
+.on{background:var(--accent-subtle);color:var(--accent-strong)}.on:before{background:var(--green)}
+.off{background:var(--smoke);color:var(--muted)}.off:before{background:#a9b6bd}
+.toggle{width:44px;height:26px;border-radius:999px;position:relative;cursor:pointer;border:0;flex:none}
+.toggle:after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.toggle.is-on{background:var(--green)}.toggle.is-on:after{left:21px}
+.toggle.is-off{background:var(--border-strong)}
+.day.locked{background:#eef3f6}
+.right{display:flex;align-items:center;gap:10px}
+.banner{background:var(--primary-subtle);border-left:4px solid var(--primary);padding:10px 12px;border-radius:var(--r-sm);font-size:13px;margin-bottom:12px}
+.tabs{display:flex;background:var(--surface);border-top:1px solid var(--border)}
+.tabs a{flex:1;text-align:center;padding:10px 0;font-size:12px;color:var(--muted);text-decoration:none}
+.tabs a.act{color:var(--primary);font-weight:600;box-shadow:inset 0 3px 0 var(--accent)}
+.desk{flex:1;min-width:300px;background:var(--surface);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);display:flex}
+.side{width:180px;background:var(--primary);color:#dbe8ee;padding:16px 0;flex:none}
+.side b{display:block;color:#fff;padding:0 16px 14px;font-size:15px}
+.side a{display:block;padding:9px 16px;color:#dbe8ee;font-size:13px;text-decoration:none}
+.side a.act{background:rgba(200,216,228,.18);color:#fff;box-shadow:inset 3px 0 0 var(--green)}
+.dmain{flex:1;padding:18px;background:var(--bg);min-width:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:12px}
+.kpi small{color:var(--muted);font-size:12px}
+.kpi b{display:block;font-size:22px;margin-top:4px}
+.bar{height:10px;border-radius:999px;background:var(--smoke);overflow:hidden;display:flex;margin-top:8px}
+.bar i{display:block;height:100%}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);margin-top:6px}
+.legend span:before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px;background:var(--c)}
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;font-size:13px}
+th{background:var(--primary-subtle);color:var(--primary);text-align:left;font-weight:600;padding:9px 10px}
+td{padding:9px 10px;border-top:1px solid var(--border)}
+tr.sel td{background:#eaf1f6}
+.tbl-wrap{overflow-x:auto}
+.row-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px;flex-wrap:wrap}
+.row-top h3{margin:0;font-size:17px}
+.btn-sm{padding:7px 12px;width:auto;display:inline-block;font-size:13px}
+.btn-accent{background:var(--accent-strong);color:#fff}
+.notes{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 18px;font-size:14px;line-height:1.55}
+.notes li{margin-bottom:4px}
+@media (max-width:700px){.side{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>Meal Management theme</h1>
+  <p>The palette applied to the login, employee and admin screens</p>
+</header>
+<main>
+
+<h2>Palette & roles</h2>
+<div class="swatches">
+  <div class="sw"><div class="chip" style="background:#2b6777"></div><div class="l"><b>Primary</b><code>#2b6777</code><br>App bar, primary buttons, admin sidebar, links</div></div>
+  <div class="sw"><div class="chip" style="background:#52ab98"></div><div class="l"><b>Accent</b><code>#52ab98</code><br>Meal ON, toggles, focus ring, company cost</div></div>
+  <div class="sw"><div class="chip" style="background:#c8d8e4"></div><div class="l"><b>Mist</b><code>#c8d8e4</code><br>Borders, dividers, selected rows</div></div>
+  <div class="sw"><div class="chip" style="background:#f2f2f2;border:1px solid #c8d8e4;border-bottom:0"></div><div class="l"><b>Smoke</b><code>#f2f2f2</code><br>Page background, meal OFF</div></div>
+  <div class="sw"><div class="chip" style="background:#fff;border-bottom:1px solid #c8d8e4"></div><div class="l"><b>White</b><code>#ffffff</code><br>Cards, inputs, tables</div></div>
+  <div class="sw"><div class="chip" style="background:#33806f"></div><div class="l"><b>Accent strong</b><code>#33806f</code><br>Derived: green text and white-on-green buttons (AA)</div></div>
+</div>
+
+<h2>Mobile screens</h2>
+<div class="screens">
+  <div class="phone">
+    <div class="appbar"><b>Sign in</b><span></span></div>
+    <div class="pbody">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#2b6777" stroke-width="2" stroke-linecap="round"><path d="M4 3v8a3 3 0 0 0 3 3v7M7 3v6M10 3v8a3 3 0 0 1-3 3"/><path d="M17 21V3c2.5 1.5 3.5 4 3.5 7s-1.5 4-3.5 4"/></svg></div>
+      <p class="center" style="margin:0 0 4px;font-weight:600;font-size:18px">Employee Meal</p>
+      <p class="center muted" style="margin:0 0 8px">Sign in with your mobile number</p>
+      <div class="card">
+        <label>Mobile No</label><input value="01711-000000">
+        <label>Password</label><input type="password" value="password">
+        <div style="height:14px"></div>
+        <button class="btn btn-primary">Sign in</button>
+        <a class="link" href="#">First time? Create your password</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone">
+    <div class="appbar"><b>My Meals</b><span>Rahim · IT</span></div>
+    <div class="pbody" style="min-height:456px">
+      <div class="banner">You can change meals for the next <b>7 days</b>.</div>
+      <div class="day locked"><div class="d"><b>Today · Mon 19</b><small>Locked</small></div><span class="pill on">ON</span></div>
+      <div class="day"><div class="d"><b>Tue 20 Oct</b><small>Lunch</small></div><div class="right"><span class="pill on">ON</span><button class="toggle is-on" aria-label="toggle"></button></div></div>
+      <div class="day"><div class="d"><b>Wed 21 Oct</b><small>Lunch</small></div><div class="right"><span class="pill off">OFF</span><button class="toggle is-off" aria-label="toggle"></button></div></div>
+      <div class="day"><div class="d"><b>Thu 22 Oct</b><small>Lunch</small></div><div class="right"><span class="pill on">ON</span><button class="toggle is-on" aria-label="toggle"></button></div></div>
+      <div class="day"><div class="d"><b>Fri 23 Oct</b><small>Weekend</small></div><span class="pill off">Holiday</span></div>
+      <div class="day"><div class="d"><b>Sat 24 Oct</b><small>Lunch</small></div><div class="right"><span class="pill on">ON</span><button class="toggle is-on" aria-label="toggle"></button></div></div>
+    </div>
+    <div class="tabs"><a class="act" href="#">Meals</a><a href="#">History</a><a href="#">Cost</a><a href="#">Profile</a></div>
+  </div>
+</div>
+
+<h2>Admin (web)</h2>
+<div class="desk">
+  <nav class="side"><b>Meal Admin</b><a class="act" href="#">Dashboard</a><a href="#">Employees</a><a href="#">Eligibility</a><a href="#">Daily Cost</a><a href="#">Reports</a><a href="#">Settings</a></nav>
+  <div class="dmain">
+    <div class="row-top"><h3>Today · 19 Oct 2026</h3><div><button class="btn btn-ghost btn-sm">Download report</button> <button class="btn btn-primary btn-sm">Set daily cost</button></div></div>
+    <div class="kpis">
+      <div class="kpi"><small>Meals ON</small><b style="color:#33806f">142</b></div>
+      <div class="kpi"><small>Meals OFF</small><b>18</b></div>
+      <div class="kpi"><small>Cost per meal</small><b>৳120</b></div>
+      <div class="kpi"><small>Total cost</small><b>৳17,040</b>
+        <div class="bar"><i style="width:40%;background:#2b6777"></i><i style="width:60%;background:#52ab98"></i></div>
+        <div class="legend"><span style="--c:#2b6777">Employee 40%</span><span style="--c:#52ab98">Company 60%</span></div>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Code</th><th>Name</th><th>Department</th><th>Type</th><th>Status</th><th>Today</th></tr>
+      <tr><td>E-1021</td><td>Rahim Uddin</td><td>IT</td><td>Default eligible</td><td>Active</td><td><span class="pill on">ON</span></td></tr>
+      <tr class="sel"><td>E-1034</td><td>Nusrat Jahan</td><td>Finance</td><td>Opt-in</td><td>Active</td><td><span class="pill off">OFF</span></td></tr>
+      <tr><td>E-1050</td><td>Kamal Hossain</td><td>Operations</td><td>Default eligible</td><td>Active</td><td><span class="pill on">ON</span></td></tr>
+      <tr><td>E-1062</td><td>Farzana Akter</td><td>HR</td><td>Opt-in</td><td>Inactive</td><td><span class="pill off">—</span></td></tr>
+    </table></div>
+  </div>
+</div>
+
+<h2>Usage rules</h2>
+<div class="notes"><ul>
+  <li><b>#52ab98 with white text fails contrast</b> (2.8:1). Use it for fills, icons, toggles and badges; use <b>#33806f</b> when you need green text or a green button with white text.</li>
+  <li>White text on <b>#2b6777</b> passes (6.3:1), so it's the default for primary buttons and the app bar.</li>
+  <li>Body text is a deep teal-ink <b>#1e3a42</b>, not pure black, so it sits with the palette.</li>
+  <li>Meal ON is green, meal OFF is grey (smoke). Days outside the editable window get a light blue-grey "locked" background.</li>
+  <li>Cost split: employee share in teal, company share in green, the same in every chart and report.</li>
+</ul></div>
+
+</main>
+</body>
+</html>

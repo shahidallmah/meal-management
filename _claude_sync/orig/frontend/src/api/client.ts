@@ -1,0 +1,95 @@
+const BASE = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, '') ?? '';
+const TOKEN_KEY = 'mm.token';
+
+export class ApiError extends Error {
+  constructor(message: string, public status: number) {
+    super(message);
+  }
+}
+
+function safeGet(key: string): string | null {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+function safeSet(key: string, value: string | null) {
+  try {
+    if (value === null) localStorage.removeItem(key);
+    else localStorage.setItem(key, value);
+  } catch { /* storage unavailable */ }
+}
+
+let token: string | null = safeGet(TOKEN_KEY);
+let onUnauthorized: (() => void) | null = null;
+
+export const auth = {
+  get token() { return token; },
+  set(t: string | null) { token = t; safeSet(TOKEN_KEY, t); },
+  onUnauthorized(cb: () => void) { onUnauthorized = cb; },
+};
+
+type Query = Record<string, string | number | boolean | null | undefined>;
+
+export function qs(params?: Query): string {
+  if (!params) return '';
+  const p = new URLSearchParams();
+  for (const [k, v] of Object.entries(params)) if (v !== undefined && v !== null && v !== '') p.set(k, String(v));
+  const s = p.toString();
+  return s ? `?${s}` : '';
+}
+
+async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
+  const headers: Record<string, string> = { Accept: 'application/json' };
+  if (body !== undefined) headers['Content-Type'] = 'application/json';
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  let res: Response;
+  try {
+    res = await fetch(BASE + path, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
+  } catch {
+    throw new ApiError('Cannot reach the server. Check your connection and try again.', 0);
+  }
+
+  if (res.status === 401 && token && !path.startsWith('/api/auth/login')) {
+    onUnauthorized?.();
+  }
+  if (!res.ok) {
+    let message = `Request failed (${res.status})`;
+    try {
+      const data = await res.json();
+      if (data?.message) message = data.message;
+      else if (data?.title) message = data.title;
+    } catch { /* not json */ }
+    throw new ApiError(message, res.status);
+  }
+  if (res.status === 204) return undefined as T;
+  const text = await res.text();
+  return (text ? JSON.parse(text) : undefined) as T;
+}
+
+export const api = {
+  get: <T>(path: string, params?: Query) => request<T>('GET', path + qs(params)),
+  post: <T>(path: string, body?: unknown) => request<T>('POST', path, body ?? {}),
+  put: <T>(path: string, body?: unknown) => request<T>('PUT', path, body ?? {}),
+  del: <T>(path: string) => request<T>('DELETE', path),
+
+  /** Downloads a file (report export) using the bearer token. */
+  async download(path: string, params: Query, fallbackName: string) {
+    const res = await fetch(BASE + path + qs(params), { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    if (!res.ok) {
+      let message = `Download failed (${res.status})`;
+      try { const d = await res.json(); if (d?.message) message = d.message; } catch { /* ignore */ }
+      throw new ApiError(message, res.status);
+    }
+    const blob = await res.blob();
+    const cd = res.headers.get('Content-Disposition') ?? '';
+    const match = /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(cd);
+    const name = match ? decodeURIComponent(match[1]) : fallbackName;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  },
+};

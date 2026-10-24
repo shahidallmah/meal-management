@@ -1,0 +1,10 @@
+README.md
+backend/MealManagement.Api/Controllers/EmployeesController.cs
+backend/MealManagement.Api/Dtos/Dtos.cs
+backend/MealManagement.Api/Program.cs
+backend/MealManagement.Api/Services/EmployeeImportService.cs
+frontend/src/api/client.ts
+frontend/src/api/types.ts
+frontend/src/components/ImportEmployeesModal.tsx
+frontend/src/pages/admin/Employees.tsx
+frontend/src/styles/app.css

@@ -1,0 +1,94 @@
+/* =========================================================
+   Meal Management — Theme tokens
+   Brand palette: #2b6777  #c8d8e4  #ffffff  #f2f2f2  #52ab98
+   Import once at app root:  import './theme/tokens.css';
+   ========================================================= */
+
+:root {
+  /* ---- Brand palette (source colors) ---- */
+  --brand-teal:        #2b6777; /* primary  */
+  --brand-mist:        #c8d8e4; /* soft blue-grey */
+  --brand-white:       #ffffff;
+  --brand-smoke:       #f2f2f2;
+  --brand-green:       #52ab98; /* accent   */
+
+  /* ---- Primary (deep teal) ---- */
+  --color-primary:            var(--brand-teal);
+  --color-primary-hover:      #235663;
+  --color-primary-active:     #1c4550;
+  --color-primary-contrast:   #ffffff;   /* text on primary: 6.3:1 */
+  --color-primary-subtle:     #e6eff4;   /* tinted backgrounds */
+
+  /* ---- Accent (green-teal) ----
+     #52ab98 is 2.8:1 against white — use it for fills, icons, chips,
+     progress bars and large text. For white text on green, or green
+     text on white, use --color-accent-strong (4.7:1). */
+  --color-accent:             var(--brand-green);
+  --color-accent-strong:      #33806f;
+  --color-accent-subtle:      #e3f2ee;
+
+  /* ---- Surfaces ---- */
+  --color-bg:                 var(--brand-smoke);  /* page background */
+  --color-surface:            var(--brand-white);  /* cards, sheets, inputs */
+  --color-surface-muted:      #f7f9fa;
+  --color-border:             var(--brand-mist);
+  --color-border-strong:      #a9c0d0;
+  --color-selected:           var(--brand-mist);   /* selected rows, active nav */
+
+  /* ---- Text ---- */
+  --color-text:               #1e3a42;   /* deep teal-ink */
+  --color-text-muted:         #5b7480;
+  --color-text-on-primary:    #ffffff;
+  --color-link:               var(--brand-teal);
+
+  /* ---- Meal status ---- */
+  --meal-on-bg:               var(--color-accent-subtle);
+  --meal-on-fg:               var(--color-accent-strong);
+  --meal-on-dot:              var(--brand-green);
+  --meal-off-bg:              var(--brand-smoke);
+  --meal-off-fg:              var(--color-text-muted);
+  --meal-off-dot:             #a9b6bd;
+  --meal-locked-bg:           #eef3f6;   /* outside the editable window */
+
+  /* ---- Feedback ---- */
+  --color-success:            var(--color-accent-strong);
+  --color-warning:            #b7791f;
+  --color-warning-subtle:     #fbf1e0;
+  --color-danger:             #c0392b;
+  --color-danger-subtle:      #fbe9e7;
+  --color-info:               var(--brand-teal);
+
+  /* ---- Cost split (charts / reports) ---- */
+  --cost-employee:            var(--brand-teal);
+  --cost-company:             var(--brand-green);
+
+  /* ---- Shape, spacing, type ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
+  --space-4: 16px; --space-5: 24px; --space-6: 32px;
+
+  --shadow-sm: 0 1px 2px rgba(43, 103, 119, 0.08);
+  --shadow-md: 0 4px 14px rgba(43, 103, 119, 0.12);
+
+  --focus-ring: 0 0 0 3px rgba(82, 171, 152, 0.45);
+
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, "Noto Sans Bengali", sans-serif;
+  --font-size-sm: 0.8125rem;
+  --font-size-md: 0.9375rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+}
+
+/* ---- Base ---- */
+html, body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-md);
+}
+a { color: var(--color-link); }
+:focus-visible { outline: none; box-shadow: var(--focus-ring); }
